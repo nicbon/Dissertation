@@ -1,10 +1,3 @@
-/*
- * File:   main.c
- * Author: Nicku
- *
- * Created on 05 februarie 2017, 15:51
- */
-
 /******************************************************************************
 
  The most basic example program to write a line of text in a hd44780 based
@@ -13,8 +6,8 @@
  Compiler: Microchip XC8 v1.12 (http://www.microchip.com/xc)
  IDE: Microchip MPLABX
 
- MCU: PIC16F877A
- Frequency: 20MHz
+ MCU: PIC16FL1937
+ Frequency: 32MHz
 
                                      NOTICE
                            
@@ -34,47 +27,45 @@ me@avinashgupta.com
 
 #include "lcd_hd44780_pic16.h"
 
-// CONFIG1
-#pragma config FOSC = INTOSC    // Oscillator Selection (INTOSC oscillator: I/O function on CLKIN pin)
-#pragma config WDTE = OFF       // Watchdog Timer Enable (WDT disabled)
-#pragma config PWRTE = OFF      // Power-up Timer Enable (PWRT disabled)
-#pragma config MCLRE = ON       // MCLR Pin Function Select (MCLR/VPP pin function is MCLR)
-#pragma config CP = OFF         // Flash Program Memory Code Protection (Program memory code protection is disabled)
-#pragma config CPD = OFF        // Data Memory Code Protection (Data memory code protection is disabled)
-#pragma config BOREN = ON       // Brown-out Reset Enable (Brown-out Reset enabled)
-#pragma config CLKOUTEN = OFF   // Clock Out Enable (CLKOUT function is disabled. I/O or oscillator function on the CLKOUT pin)
-#pragma config IESO = ON        // Internal/External Switchover (Internal/External Switchover mode is enabled)
-#pragma config FCMEN = ON       // Fail-Safe Clock Monitor Enable (Fail-Safe Clock Monitor is enabled)
+// CONFIG
+#pragma config FOSC = INTOSC        // Oscillator Selection bits (HS oscillator)
+#pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled)
+#pragma config PWRTE = OFF      // Power-up Timer Enable bit (PWRT disabled)
+#pragma config BOREN = ON       // Brown-out Reset Enable bit (BOR enabled)
+#pragma config LVP = ON         // Low-Voltage (Single-Supply) In-Circuit Serial Programming Enable bit (RB3/PGM pin has PGM function; low-voltage programming enabled)
+#pragma config CPD = OFF        // Data EEPROM Memory Code Protection bit (Data EEPROM code protection off)
+#pragma config WRT = OFF        // Flash Program Memory Write Enable bits (Write protection off; all program memory may be written to by EECON control)
+#pragma config CP = OFF         // Flash Program Memory Code Protection bit (Code protection off)
 
-// CONFIG2
-#pragma config WRT = OFF        // Flash Memory Self-Write Protection (Write protection off)
-#pragma config PLLEN = ON       // PLL Enable (4x PLL enabled)
-#pragma config STVREN = ON      // Stack Overflow/Underflow Reset Enable (Stack Overflow or Underflow will cause a Reset)
-#pragma config BORV = LO        // Brown-out Reset Voltage Selection (Brown-out Reset Voltage (Vbor), low trip point selected.)
-#pragma config LVP = ON         // Low-Voltage Programming Enable (Low-voltage programming enabled)
 
 
 void main (void)
 {
-    //OSCCON=0b11110010;
-  //Initialize the LCD Module
-  LCDInit(LS_ULINE);
+    OSCCON=0b01110000;
+    TRISA|=0b00000001;  //set RA0 ast input pin
+    ANSELA|=0b00000001;  //set AN0 as ADC pin
+    ADCON0|=0b00000011;
+    ADCON1|=0b10000000;
+//  //Initialize the LCD Module
+  LCDInit(LS_NONE);
 
   //Clear the display
-  LCDClear();
-
-  //Write a string
   
 
+  //Write a string
+ 
 
   while(1)
-  {
-     // LCDWriteInt(13,2);
+  {   LCDClear();
+      LCDWriteString("V=");
+      while(ADCON0&0b00000010==0);
       
-
-     // __delay_ms(10);
-LCDWriteInt(12,2);
+       LCDWriteInt(ADRESL+(ADRESH<<8),5);  //afisare rezultat conversie analog numerica
+       ADCON0|=0b00000011;
+      __delay_ms(1000);
+      
      //Do nothing, just loop indefinitely
   }
 
 }
+
