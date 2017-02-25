@@ -1,0 +1,17 @@
+*.p1
+*.d
+*.pre
+*.cmf
+*.elf
+*.hex
+*.hxl
+*.lst
+*.map
+*.mum
+*.rlf
+*.sdb
+*.sym
+*.xml
+*.mk
+*.properties
+*.bash

@@ -23,10 +23,10 @@ AVINASH GUPTA
 me@avinashgupta.com
 
 *******************************************************************************/
-#include <xc.h>
 
-#include "lcd_hd44780_pic16.h"
 
+
+#include "Include.h"
 // CONFIG
 #pragma config FOSC = INTOSC        // Oscillator Selection bits (HS oscillator)
 #pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled)
@@ -53,15 +53,16 @@ void main (void)
   
 
   //Write a string
- 
+  
 
   while(1)
-  {   LCDClear();
+  {   
+      LCDClear();
       LCDWriteString("V=");
-      while(ADCON0&0b00000010==0);
       
-       LCDWriteInt(ADRESL+(ADRESH<<8),5);  //afisare rezultat conversie analog numerica
-       ADCON0|=0b00000011;
+      
+       LCDWriteInt(ADC_Get_Value(1),5);  //afisare rezultat conversie analog numerica
+      
       __delay_ms(1000);
       
      //Do nothing, just loop indefinitely
