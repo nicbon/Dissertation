@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16lf1937.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1937.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -4678,39 +4678,39 @@ hn=c>>4;
 ln=(c & 0x0F);
 
 if(isdata==0)
-(RC4=0);
+(RB1=0);
 else
-(RC4=1);
+(RB1=1);
 
 _delay((unsigned long)((0.5)*(32000000/4000000.0)));
 
-(RC6=1);
+(RB2=1);
 
 
 
-temp=(PORTC & (~(0X0F<<0)))|((hn<<0));
-PORTC=temp;
-
-_delay((unsigned long)((1)*(32000000/4000000.0)));
-
-
-
-(RC6=0);
-
-_delay((unsigned long)((1)*(32000000/4000000.0)));
-
-
-(RC6=1);
-
-temp=(PORTC & (~(0X0F<<0)))|((ln<<0));
-
-PORTC=temp;
+temp=(PORTD & (~(0X0F<<0)))|((hn<<0));
+PORTD=temp;
 
 _delay((unsigned long)((1)*(32000000/4000000.0)));
 
 
 
-(RC6=0);
+(RB2=0);
+
+_delay((unsigned long)((1)*(32000000/4000000.0)));
+
+
+(RB2=1);
+
+temp=(PORTD & (~(0X0F<<0)))|((ln<<0));
+
+PORTD=temp;
+
+_delay((unsigned long)((1)*(32000000/4000000.0)));
+
+
+
+(RB2=0);
 
 _delay((unsigned long)((1)*(32000000/4000000.0)));
 
@@ -4724,11 +4724,11 @@ void LCDBusyLoop()
 uint8_t busy,status=0x00,temp;
 
 
-TRISC|=(0x0f<<0);
+TRISD|=(0x0f<<0);
 
 
-(RC5=1);
-(RC4=0);
+(RB3=1);
+(RB1=0);
 
 
 
@@ -4738,24 +4738,24 @@ _delay((unsigned long)((0.5)*(32000000/4000000.0)));
 do
 {
 
-(RC6=1);
+(RB2=1);
 
 
 _delay((unsigned long)((0.5)*(32000000/4000000.0)));
 
-status=(PORTC>>0);
+status=(PORTD>>0);
 status=status<<4;
 
 _delay((unsigned long)((0.5)*(32000000/4000000.0)));
 
 
-(RC6=0);
+(RB2=0);
 _delay((unsigned long)((1)*(32000000/4000000.0)));
 
-(RC6=1);
+(RB2=1);
 _delay((unsigned long)((0.5)*(32000000/4000000.0)));
 
-temp=(PORTC>>0);
+temp=(PORTD>>0);
 temp&=0x0F;
 
 status=status|temp;
@@ -4764,14 +4764,14 @@ busy=status & 0b10000000;
 
 _delay((unsigned long)((0.5)*(32000000/4000000.0)));
 
-(RC6=0);
+(RB2=0);
 _delay((unsigned long)((1)*(32000000/4000000.0)));
 }while(busy);
 
-(RC5=0);
+(RB3=0);
 
 
-TRISC&=(~(0x0F<<0));
+TRISD&=(~(0x0F<<0));
 
 }
 
@@ -4782,37 +4782,31 @@ void LCDInit(uint8_t style)
 _delay((unsigned long)((30)*(32000000/4000.0)));
 
 
-TRISC&=(~(0x0F<<0));
+TRISD&=(~(0x0F<<0));
 
-TRISCbits.TRISC6=0;
-TRISCbits.TRISC4=0;
-TRISCbits.TRISC5=0;
+TRISBbits.TRISB2=0;
+TRISBbits.TRISB1=0;
+TRISBbits.TRISB3=0;
 
-PORTC&=(~(0x0F<<0));
+PORTD&=(~(0x0F<<0));
 
-(RC6=0);
-(RC5=0);
-(RC4=0);
+(RB2=0);
+(RB3=0);
+(RB1=0);
 
 
 _delay((unsigned long)((0.5)*(32000000/4000000.0)));
 
-(RC6=1);
-PORTC|=((0b00000010)<<0);
+(RB2=1);
+
 _delay((unsigned long)((1)*(32000000/4000000.0)));
-(RC6=0);
+(RB2=0);
 _delay((unsigned long)((1)*(32000000/4000000.0)));
 
 
 LCDBusyLoop();
 
-
-
-
-(LCDByte(0b00101000,0));
-(LCDByte(0b00001100|style,0));
-
-
+# 244
 (LCDByte(0b01000000,0));
 
 uint8_t __i;

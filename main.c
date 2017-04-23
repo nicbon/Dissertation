@@ -36,32 +36,40 @@ me@avinashgupta.com
 #pragma config CPD = OFF        // Data EEPROM Memory Code Protection bit (Data EEPROM code protection off)
 #pragma config WRT = OFF        // Flash Program Memory Write Enable bits (Write protection off; all program memory may be written to by EECON control)
 #pragma config CP = OFF         // Flash Program Memory Code Protection bit (Code protection off)
-
+unsigned int i=0;
 
 
 void main (void)
 {unsigned int temp;
     OSCCON=0b01110000;
-  //  TRISA|=0b00000001;  //set RA0 ast input pin
-    TRISD=0x00;
-    ANSELD=0b00000000;  //set AN0 as ADC pin
- //  ANSELD=0;
-//   ADCON0|=0b00000011;
-//   ADCON1|=0b10000000;
-//  //Initialize the LCD Module
   LCDInit(LS_NONE);
-//ADC_Channel_Init(0);
-  //Clear the display
+  TRISDbits.TRISD5=1;
+  TRISDbits.TRISD6=1;
+  TRISDbits.TRISD7=1;
+ 
   
-
   //Write a string
   LCDClear();
 
+  //Initializa the Interrupt on change 
+   Init_External_Intterupt(1, NEGATIVE);
+   Enable_Global_Interrupts();
+ 
+  
+  // ei();
+  //  INTCON|=PEIE;
   while(1)
-  {   
-     LCDClear();  
-    LCDWriteString("Ani te iubesc! ");
-   __delay_ms(500);  
+  {  
+      
+         
+         
+          LCDClear();
+              LCDWriteInt(IOC_Flag,4);
+          __delay_ms(100);
+      
+      
+    
+    
     
   }
 
