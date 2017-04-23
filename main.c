@@ -42,41 +42,27 @@ me@avinashgupta.com
 void main (void)
 {unsigned int temp;
     OSCCON=0b01110000;
-    TRISA|=0b00000001;  //set RA0 ast input pin
-    ANSELA|=0b00000001;  //set AN0 as ADC pin
-    ADCON0|=0b00000011;
-    ADCON1|=0b10000000;
+  //  TRISA|=0b00000001;  //set RA0 ast input pin
+    TRISD=0x00;
+    ANSELD=0b00000000;  //set AN0 as ADC pin
+ //  ANSELD=0;
+//   ADCON0|=0b00000011;
+//   ADCON1|=0b10000000;
 //  //Initialize the LCD Module
   LCDInit(LS_NONE);
-ADC_Channel_Init(0);
+//ADC_Channel_Init(0);
   //Clear the display
   
 
   //Write a string
-  
+  LCDClear();
 
   while(1)
   {   
-      LCDClear();
-      
-      
-     temp=get_Temp();
-      
-       LCDWriteInt(temp/10,3);
-       LCDWriteString(".");
-       LCDWriteInt(temp%10,1);
-       //LCDWriteString(0x0C);
-       LCDWriteString("C");
-       LCDCmd(0xC0);
-       LCDWriteInt(get_Thermistor_Value(ADC_Get_Value(0)),5);
-       __delay_ms(100);
-       
-       //LCDWriteString(".");
-      // LCDWriteString("C");
-     
-      
-      
-     //Do nothing, just loop indefinitely
+     LCDClear();  
+    LCDWriteString("Ani te iubesc! ");
+   __delay_ms(500);  
+    
   }
 
 }

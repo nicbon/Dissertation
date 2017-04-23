@@ -33,12 +33,12 @@ extern "C" {
 //Read/Write (RW)
 //RW is connected to Port D bit 5
 #define LCD_RW_PORT     C
-#define LCD_RW_POS      5
+#define LCD_RW_POS      6
 
 //Enable signal (E)
 //E is connected to Port D bit 6
 #define LCD_E_PORT      C
-#define LCD_E_POS       6
+#define LCD_E_POS       5
 
 /***********************************************
 
